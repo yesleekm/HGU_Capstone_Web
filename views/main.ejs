@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Web</title>
+		<style>
+			.test { border: 1px solid black;}
+			.title { font-weight: bolder; font-size:3em; }
+			.emphasis { color: red; font-weight: bolder; font-size:130%; }
+			.button-link { border: none; background: none; cursor: pointer; color: black; padding: 0; font-family: inherit; font-size: inherit; }
+			.button-link:hover { color:blue; font-weight: bolder;}
+			table { width: 100%; }
+		</style>
+	</head>
+	<body>
+		<div class="title">20-1 Node.js web test</div>
+		<!-- <form action="/camera" method="get">
+			<input type="submit" value="촬영 시작">
+		</form><br><br> -->
+
+		<br><hr><hr><br>
+
+		<% if(c_num != 0){ %>
+		<div class="emphasis"><%= c_num %> client connected! </div>
+		<% }else{ %>
+		<div>There is no connection!!</div>
+		<% } %>
+		<ul>
+			<% for(var i = 0; i<c_num; i++){ %>
+			<li>
+				<%= "[" + (i+1) + "번] " + c_ip[i] %>
+			</li>
+			<% } %>
+		</ul>
+
+		<br><hr><hr><br>
+
+		<% if (img_name){ %>
+			<img src = 'source/<%= img_name %>'> 현재선택이미지: <%= img_name %><br><br>
+		<% }else{ %>
+			현재 선택된 이미지가 없습니다.<br><br>
+		<% } %>
+		<% if (img_list[c_log-1]){ %>
+			<img src = 'source/<%= img_list[c_log-1]%>'> 가장최근이미지: <%= img_list[c_log-1]%><br><br>
+		<% }else{ %>
+			이미지 로그가 없습니다.<br><br>
+		<% } %>
+
+		<br><hr><hr><br>
+
+		연결된 카메라의 갯수는 총 <span class="emphasis"><%= c_num%></span> 개 입니다.<br>
+		현재까지의 촬영 기록은 총 <span class="emphasis"><%= c_log%></span> 장 입니다.<br><br>
+
+		<ul>
+				<% for(var i = 0; i<c_log; i++){ %>
+					<form action="/image/<%= img_list[i]%>" method="get">
+						<button type="submit" class="button-link" ><%= img_list[i]%></button>
+					</form><br><br>
+				<% }%>
+		</ul>
+
+	</body>
+</html>

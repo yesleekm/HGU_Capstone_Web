@@ -4,8 +4,8 @@ var net_port = 9090;
 var express_port = 7070;
 
 //test variable
-var c_num_tmp = 3;
-var c_log_tmp = 6;
+// var client_num_tmp = 3;
+// var client_log_tmp = 6;
 
 //3 var for client information
 var client_ip = new Array();
@@ -14,57 +14,57 @@ var client_log = 0;
 var socket = new Array();
 //var take_pic = new Boolean(false);
 
-var server = net_server.createServer(function(client) {
-
-	    client_num++;
-	    client_ip[client_num-1] = client.remoteAddress;
-	    socket[client_num-1] = client;
-
-	    console.log('[%d] Client connection', client_num);
-	    console.log('   local = %s:%s', client.localAddress, client.localPort);
-	    console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
-
-	    //client.setTimeout(500);
-	    client.setEncoding('utf8');
-
-	    client.on('data', function(data) {
-		            console.log('Received data from client on port %d: %s', client.remotePort, data.toString());
-
-		            //writeData(client, 'Sending: ' + data.toString());
-		            //console.log('  Bytes sent: ' + client.bytesWritten);
-		        });
-
-	    client.on('end', function() {
-		            console.log('Client disconnected');
-		        });
-
-	    client.on('error', function(err) {
-		            console.log('Socket Error: ', JSON.stringify(err));
-		        });
-
-	    client.on('timeout', function() {
-		            console.log('Socket Timed out');
-		        });
-});
-
-server.listen(net_port, function() {
-	    //console.log('Server listening: ' + JSON.stringify(server.address()));
-	    console.log('Server socket listening, Port: ' + net_port);
-
-	    server.on('close', function(){
-		            console.log('Server Terminated');
-		        });
-	    server.on('error', function(err){
-		            console.log('Server Error: ', JSON.stringify(err));
-		        });
-});
-
-function writeData(socket, data){
-	  var success = socket.write(data);
-	  if (!success){
-		      console.log("Client Send Fail");
-		    }
-}
+// var server = net_server.createServer(function(client) {
+//
+// 	    client_num++;
+// 	    client_ip[client_num-1] = client.remoteAddress;
+// 	    socket[client_num-1] = client;
+//
+// 	    console.log('[%d] Client connection', client_num);
+// 	    console.log('   local = %s:%s', client.localAddress, client.localPort);
+// 	    console.log('   remote = %s:%s', client.remoteAddress, client.remotePort);
+//
+// 	    //client.setTimeout(500);
+// 	    client.setEncoding('utf8');
+//
+// 	    client.on('data', function(data) {
+// 		            console.log('Received data from client on port %d: %s', client.remotePort, data.toString());
+//
+// 		            //writeData(client, 'Sending: ' + data.toString());
+// 		            //console.log('  Bytes sent: ' + client.bytesWritten);
+// 		        });
+//
+// 	    client.on('end', function() {
+// 		            console.log('Client disconnected');
+// 		        });
+//
+// 	    client.on('error', function(err) {
+// 		            console.log('Socket Error: ', JSON.stringify(err));
+// 		        });
+//
+// 	    client.on('timeout', function() {
+// 		            console.log('Socket Timed out');
+// 		        });
+// });
+//
+// server.listen(net_port, function() {
+// 	    //console.log('Server listening: ' + JSON.stringify(server.address()));
+// 	    console.log('Server socket listening, Port: ' + net_port);
+//
+// 	    server.on('close', function(){
+// 		            console.log('Server Terminated');
+// 		        });
+// 	    server.on('error', function(err){
+// 		            console.log('Server Error: ', JSON.stringify(err));
+// 		        });
+// });
+//
+// function writeData(socket, data){
+// 	  var success = socket.write(data);
+// 	  if (!success){
+// 		      console.log("Client Send Fail");
+// 		    }
+// }
 
 //---add expreess
 var express = require('express');
@@ -76,7 +76,10 @@ var fs = require('fs');		//to get 'source' folder
 //클릭한 이미지
 var image_name = "";
 var image_list;
-
+var isConnected= false;
+var isSetting = false;
+var setting_bnum;
+var setting_plist;
 
 //view engine을 ejs 파일 형태로 설정
 app.set("view engine", "ejs");
@@ -91,18 +94,34 @@ app.listen(express_port, function(){
 
 app.get('/', function(req, res){
 	fs.readdir('source', function(err, files) {
-		if(err){
-			console.log(err);
+		isConnected = (files.length!=0)? true:false;
+		if(!isConnected){
+			res.render('waiting');
 		}
-		//console.log(files.join('\n'));
-		res.render('main', {
-			img_list: files,
-			c_num: c_num_tmp,
-			c_log: c_log_tmp,
-			c_ip: client_ip,
-			img_name: image_name
-		});
-	});
+		else if(!isSetting){
+	    if(err){
+	      console.log(err);
+	    }
+	    console.log(files.join('\n'));
+	    res.render('setting', {
+	      img_list: files
+	    });
+		}
+		else{
+			if(err){
+				console.log(err);
+			}
+			client_log = files.length;
+			//console.log(files.join('\n'));
+			res.render('main', {
+				img_list: files,
+				c_num: client_num,
+				c_log: client_log,
+				c_ip: client_ip,
+				img_name: image_name
+			});
+		}
+  });
 });
 
 app.get('/image/:filename', function(req, res){
@@ -111,14 +130,27 @@ app.get('/image/:filename', function(req, res){
 	res.redirect('/');
 });
 
-app.get('/camera', function(req, res){
-	if(client_num!=0){
-		console.log("Button is clicked!");
-		for(var i = 0; i < client_num; i++){
-			writeData(socket[i], "take a picture!!");
-		}
-	}
-	else{
-		console.log("There is no client!");
-	}
+// app.get('/camera', function(req, res){
+// 	if(client_num!=0){
+// 		console.log("Button is clicked!");
+// 		for(var i = 0; i < client_num; i++){
+// 			writeData(socket[i], "take a picture!!");
+// 		}
+// 	}
+// 	else{
+// 		console.log("There is no client!");
+// 	}
+// });
+
+app.get('/setting/points', function(req, res){
+	setting_bnum = req.query.b_num;
+	setting_plist = JSON.parse(req.query.p_list);
+	isSetting=true;
+	fs.writeFile('data/ROI.txt', "number\n"+setting_bnum+"\n", 'utf8', function(err){
+		console.log(setting_plist);
+	})
+	fs.appendFile('data/ROI.txt', "data\n"+setting_plist, 'utf8', function(err){
+		console.log(setting_plist);
+	})
+	res.redirect('/');
 });

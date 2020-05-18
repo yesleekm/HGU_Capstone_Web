@@ -1,28 +1,21 @@
-var express_port = 7070;
+/*
+200518 Leekyungmin
+HGU 20-2 capstone web
+*/
 
-var client_num = 0;
-var client_log = 0;
-var socket = new Array();
-
-//---add expreess
-var express = require('express');
-var ejs = require('ejs');
-//var bodyParser = require('body-parser');
-var app = express();
-var fs = require('fs');		//to get 'source' folder
-
-//1-1) 페이지 상태 변수
+//1-1) 상태 변수
 var isConnected= false;
 var isAdmin = false;
-
-//1-2) 지정 경로 변수
+//1-2) 지정 변수
+var express_port = 7070;
 var path_src_deap = 'source/';
 var path_src_ROI = 'data/src_ROI/';
 var path_data_ROI = 'data/ROI.txt';
 var path_data_people = 'data/people.txt';
 var path_data_camera = 'data/camera.txt';
-
 //1-3) 일반 변수
+var client_num = 0;
+var client_log = 0;
 var recent_image_name = "";
 var recent_image_num = -1;
 var curr_image_name = "";
@@ -42,7 +35,6 @@ for(var i =0 ; i<20; i++){
 var list_src_ROI;
 var list_data_people = new Array();
 var list_data_camera = new Array();
-
 //1-4) 일반 함수
 function findNumber(list, filename){
 	// list - 0:전체 / 홀수:파일명 / 짝수:사람수
@@ -55,7 +47,12 @@ function findNumber(list, filename){
 	return -1;
 }
 
-//2) view engine - ejs + static path 설정 + express listen
+//2-1) 모듈 동작 변수 선언 (express, ejs, fs)
+var express = require('express');
+var ejs = require('ejs');
+var app = express();
+var fs = require('fs');
+//2-2) 엔진 설정 (view engine - ejs + static path 설정 + express listen)
 app.set("view engine", "ejs");
 app.set('views', __dirname+'/views');
 app.use(express.static(__dirname));				//source 내의 이미지를 제공하기 위함

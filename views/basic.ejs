@@ -2,16 +2,17 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>Web</title>
+		<title>MAIN</title>
 		<style>
 			* {text-align: center; margin:auto; }
 			table {width: 80%;}
 			td { padding: 1%; }
 			.test { border: 1px solid black;}
-			.title { font-weight: bolder; font-size:3em; margin: 30px 5px; clear:both; }
+			.title { font-weight: bolder; font-size:3em; margin: 30px 5px; clear:both; display:inline-block;}
 			.subtitle { font-weight: bolder; font-size:1.5em; margin: 10px 10px; }
 			.emphasis { color: blue; font-weight: bolder; font-size:130%; margin:1%;}
 			.more_emphasis { color: red; font-weight: bolder; font-size:150%; margin:3%;}
+			.admin {background-color: white; border:none; position:absolute; top:2%; right:2%; display:inline-block; width:10%; height:10%;}
 			.button-link { border: none; background: none; cursor: pointer; color: black; font-family: inherit; font-size: inherit; }
 			.button-link:hover { color:blue; font-weight: bolder;}
 			.img_left {width: auto; height: auto; max-width:60%; max-height:40%;  }
@@ -22,10 +23,11 @@
 		</style>
 	</head>
 	<body>
-		<div class="title">(0518) 메인 페이지</div>
-		<!-- <form action="/camera" method="get">
-			<input type="submit" value="촬영 시작">
-		</form><br><br> -->
+
+		<div class="title">기본 페이지</div>
+		<form action="/BASIC/toADMIN_1" method="GET">
+				<button type="submit"  class = "admin"> <img src = 'views/data/icon_key.png'></button>
+		</form>
 
 		<br><hr><hr><br>
 
@@ -50,14 +52,14 @@
 				<% if (curr_img_name){ %>
 					<img class = img_left src = '<%=path%><%= curr_img_camera %>/<%= curr_img_name %>' onClick="alert('이미지 상의 인원 수는 '+<%= curr_img_num %>+'명입니다.')">
 				<% }else{ %>
-					<div class="emphasis">(선택 이미지 없음)</div>
+					<div class="emphasis">(미 선택)</div>
 				<% } %>
 				</td>
 				<td>
 					<% if (curr_img_name){ %>
 						<img class = img_right src = '<%=path%><%= curr_img_camera %>/<%= recent_img_name %>' onClick="alert('이미지 상의 인원 수는 '+<%= recent_img_num %>+'명입니다.')">
 					<% }else{ %>
-						<div class="emphasis">(선택 이미지 없음)</div>
+						<div class="emphasis">(미 선택)</div>
 					<% } %>
 				</td>
 			</tr>
@@ -108,7 +110,7 @@
 						<% for(var j =0; j< c_log[i]; j++) { %>
 							<tr>
 								<td>
-									<form action="/image/<%=i+1%>/<%= img_list[i][j]%>" method="get">
+									<form action="/BASIC/image/<%=i+1%>/<%= img_list[i][j]%>" method="get">
 										<button type="submit" class="button-link" ><%= img_list[i][j] %></button>
 									</form>
 								</td>

@@ -1,11 +1,14 @@
 <!DOCTYPE HTML>
 <html>
   <head>
+		<title>ADMIN_2</title>
     <meta charset="utf-8">
     <style>
       * {text-align: center; margin:auto; }
+      hr.top {margin-bottom:5%;}
       .title { font-weight: bolder; font-size:3em; margin: 30px 10px;}
-			.subtitle { font-weight: bolder; font-size:1.5em; margin: 10px 10px;}
+			.subtitle { color:red; font-weight: bolder; font-size:1.5em; margin: 20px 10px;}
+      .emphasis { color: blue; font-weight: bolder; margin:1%;}
       .btn_left {background-color: white; background-image: url("views/data/icon_directionL.png"); background-repeat: no-repeat; background-position: center center; float:left; width:130px; height:80px; text-align: center; border: none; }
       .btn_right {background-color: white;background-image: url("views/data/icon_directionR.png");background-repeat: no-repeat; background-position: center center; float:right; width:130px; height:80px; text-align: center; border: none; }
       .btn_submit {background-color: white;background-image: url("views/data/icon_submit.png");background-repeat: no-repeat; background-position: center center; float:right; width:130px; height:80px; text-align: center; border: none; }
@@ -16,7 +19,8 @@
   </head>
 
   <body>
-		<div class="title">ADMIN mode - ROI (<%= num_curr %>/<%= num_img %>)</div>
+		<div class="title">Admin_2 <span class="emphasis">ROI설정</span>(<%= num_curr %>/<%= num_img %>)</div><hr><hr class="top">
+    <div class="subtitle"> 이미지가 나타나지 않을 시 새로고침을 눌러주세요 </div>
     <div class="UI">
     <canvas id="src_background" width= "400px" height= "300px" onClick="findCoordinates()"></canvas>
     <script>
@@ -62,12 +66,12 @@
         }
       }
       function clickButton(btn){
-        document.send_form.action = "/setting/" + btn;
+        document.send_form.action = "/ADMIN_2/" + btn;
         var form = document.send_form;
         form.p_list.value=JSON.stringify(point_list);
         form.b_num.value=block_num;
-        if(btn=='finish'){
-          alert("완료되었습니다. 메인페이지로 이동합니다.");
+        if(btn=='toBASIC'){
+          alert("설정이 완료되었습니다.\n메인페이지로 이동합니다.");
         }
         form.submit();
       }
@@ -80,7 +84,7 @@
       <% } if (num_curr!=num_img) { %>
       <button type="submit" class="btn_right" onclick="clickButton('next')"> </button>
       <% } else { %>
-      <button type="submit" class="btn_submit" onclick="clickButton('finish')"> </button>
+      <button type="submit" class="btn_submit" onclick="clickButton('toBASIC')"> </button>
       <% } %>
     </form><br><br>
     </div>

@@ -55,7 +55,7 @@ var fs = require('fs');
 //2-2) 엔진 설정 (view engine - ejs + static path 설정 + express listen)
 app.set("view engine", "ejs");
 app.set('views', __dirname+'/views');
-app.use(express.static(__dirname));				//source 내의 이미지를 제공하기 위함
+app.use(express.static(__dirname));	
 app.listen(express_port, function(){
 	console.log('Express Start, Port: ' + express_port);
 });

@@ -7,17 +7,18 @@ HGU 20-2 capstone web
 var mode = 1;		// 1~3.admin / 4.basic
 var isSet = false;
 //1-2) 상수
-var express_port = 7070;
-var path_child = '../../bin/a.out'
-var path_src_deap = '../../resources/images/';
-var path_src_ROI = '../../config/images/';
-var path_data_ROI = '../../config/ROI.txt';
-var path_data_people = '../../resources/people.txt';
-var path_data_camera = '../../resources/camera_ip.txt';
-var path_data_admin = '../../config/admin_input.txt'
-var path_data_mode = '../../config/mode.txt'
+var express_port = 10001;
+var path_child = __dirname + '/../../bin/a.out'
+var path_img_ROI = 'config/images/';
+var path_src_ROI = __dirname + '/../../config/images/';
+var path_img_deap = 'resources/images/';
+var path_src_deap = __dirname + '/../../resources/images/';
+var path_data_ROI = __dirname + '/../../config/ROI.txt';
+var path_data_people = __dirname + '/../../resources/people.txt';
+var path_data_camera = __dirname + '/../../resources/camera_ip.txt';
+var path_data_admin = __dirname + '/../../config/admin_input.txt'
+var path_data_mode = __dirname + '/../../config/mode.txt'
 //1-3) 일반 변수
-//admin-1
 var num_camera;
 var res_capture=new Array(2);;
 var res_resize=new Array(2);
@@ -93,7 +94,7 @@ app.get('/', function(req, res){
 			break;
 		case 3:
 			res.render('admin_2', {
-				path: path_src_ROI,
+				path: path_img_ROI,
 				img_list: list_src_ROI,
 				num_curr: num_curr_ROI,
 				num_img: num_camera
@@ -109,7 +110,7 @@ app.get('/', function(req, res){
 				num_src_deap[i] = list_src_deap[i].length;
 			}
 			res.render('basic', {
-				path: path_src_deap,
+				path: path_img_deap,
 				p_num: num_people,
 				img_list: list_src_deap,
 				c_num: num_camera,
